@@ -30,6 +30,7 @@ const seeder = async () => {
             );
         };
         console.log('Seed Successful');
+        process.exit(0)
     } catch (error) {
         console.error(error);
     }

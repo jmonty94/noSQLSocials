@@ -62,8 +62,9 @@ thoughtsSchema.virtual('reactionCount').get(function() {
 });
 
 function formattedTimestamp(createdAt){
-    const date = createdAt.toLocaleString()
-    return `${date}`;
+    const date = createdAt.toLocaleDateString([], { dateStyle: 'long'});
+    const time = createdAt.toLocaleTimeString([], { timeStyle: 'long'});
+    return `${date} at ${time}`;
 };
 
 

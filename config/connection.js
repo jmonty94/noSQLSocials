@@ -7,4 +7,4 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 
-module.exports = mongoose.connect
+module.exports = mongoose.connection
