@@ -44,6 +44,7 @@ const deleteThought = async (req, res) => {
                 },
             },
         );
+        res.status(200).json(thought);
     } catch (error) {
         res.status(500).json({ error });
     }
@@ -78,6 +79,7 @@ const removeReaction = async (req, res) => {
                 new: true,
             },
         );
+        res.status(200).json(thought);
     } catch (error) {
         res.status(500).json({ error });
     }

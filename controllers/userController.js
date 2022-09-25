@@ -23,33 +23,32 @@ const userById = async (req,res) => {
 
 const updateUser = async (req,res) => {
     try {
-        const userId = req.params.userId;
-        const currentUser = await User.findById(userId);
         const updatedUser = await User.findByIdAndUpdate(
-            userId,
+            req.params.userId,
             req.body,
             {
                 new: true,
             },
         );
-        if(req.body.username) {
-            const thoughts = await Thought.find();
-
-            for (let i = 0; i < thoughts.length; i++) {
-                if (thoughts[i].username === currentUser.username) {
-                    thoughts[i].username = req.body.username  
-                }
-                for (let i = 0; i < thoughts.reactions.length; i++) {
-                    if (thoughts.reactions[i].username === currentUser.username) {
-                        thoughts.reactions[i].username = req.body.username;
+        // Update thoughs and comments if changing username
+        if (req.body.username) {
+            // update thoughts
+            for (let i=0; i < updatedUser.thoughts.length; i++) {
+                const thought = await Thought.findOne({ _id: updatedUser.thoughts[i] });
+                for (let i=0; i < thought.reactions.length; i++) {
+                    if (thought.reactions[i].username === thought.username) {
+                        reaction.username = req.body.username;
                     }
                 }
-            }
+                thought.username = req.body.username;
+                thought.save();
+            };
         }
         res.status(200).json(updatedUser);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error });
-    }
+    };   
 };
 
 const deleteUser = async (req,res) => {

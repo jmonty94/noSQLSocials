@@ -47,7 +47,6 @@ const thoughtsSchema = new Schema({
         required: true,
     },
     reactions: [reactionSchema],
-    // todo build reaction schema and add timestamp getter methodg
 },
 {
     toJSON: {
