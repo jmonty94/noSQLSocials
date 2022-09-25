@@ -16,24 +16,20 @@ const seeder = async () => {
         await User.insertMany(users);
         const thoughts = await Thought.insertMany(thoughtsFromDB);
 
-        for(let i=0; i<thoughts.length; i++) {
+        for (const thought of thoughts) {
             await User.findOneAndUpdate(
-               {
-                  username: thoughts.username
-               },
-               {
-                  $push: {thoughts: thoughts._id}
-               },
-               {
-                  new: true
-               }
+                { username: thought.username },
+                { $push: { thoughts: thought._id } },
+                { new: true }
             );
         };
+        const userData = await User.find().populate('thoughts')
         console.log('Seed Successful');
-        process.exit(0)
+        console.log(JSON.stringify(userData, null, 2));
     } catch (error) {
         console.error(error);
     }
+    process.exit(0)
 };
 
 seeder();
