@@ -1,4 +1,35 @@
 const { Schema, model } = require("mongoose");
+const ObjectId = require('mongodb').ObjectId
+
+const reactionSchema = new Schema(
+    {
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: new ObjectId(),
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            maxLength: 280,
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now(),
+            get: formattedTimestamp,
+        },
+    },
+    {
+        toJSON: {
+            getters: true,
+        },
+        id: false,
+    },
+);
+
 
 const thoughtsSchema = new Schema({
     thoughtText: {
@@ -15,8 +46,25 @@ const thoughtsSchema = new Schema({
         type: String,
         required: true,
     },
-    // todo build reaction schema and add timestamp getter method
-})
+    reactions: [reactionSchema],
+    // todo build reaction schema and add timestamp getter methodg
+},
+{
+    toJSON: {
+        virtuals: true,
+        getters: true,
+    },
+    id: false,
+});
+
+thoughtsSchema.virtual('reactionCount').get(function() {
+    return this.reactions.length;
+});
+
+function formattedTimestamp(createdAt){
+    const date = createdAt.toLocaleString()
+    return `${date}`;
+};
 
 
-module.exports = model('thoughts', thoughtsSchema)
+module.exports = model('Thought', thoughtsSchema);

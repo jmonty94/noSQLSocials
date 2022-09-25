@@ -1,6 +1,6 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const db = require('./config/connection');
+const routes = require('./routes');
 
 
 const app = express();
@@ -8,17 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log('Success');
-    })
-    .catch(err => console.log(err));
-
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(routes);
 
 
-app.listen(PORT, () => {
+
+db.once('open', () => {
     console.log(`SERVER UP ON PORT ${PORT}`);
 })

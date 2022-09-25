@@ -13,12 +13,18 @@ const userSchema = new Schema({
         match: /.+\@.+\..+/,
         unique: true,
     },
+    thoughts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Thought',
+        },
+    ],
     friends: [
         {
             type: Schema.Types.ObjectId,
             ref: 'User',
-        }
-    ]
+        },
+    ],
 }, {
     timestamps: true,
     toJSON: {
